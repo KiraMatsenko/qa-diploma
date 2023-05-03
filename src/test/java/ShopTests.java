@@ -1,9 +1,12 @@
-import com.codeborne.selenide.Configuration;
 import data.DataHelper;
 import data.SQLHelper;
+import lombok.SneakyThrows;
 import objects.BuyTour;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
 import static data.SQLHelper.cleanDatabase;
@@ -11,7 +14,7 @@ import static data.SQLHelper.cleanDatabase;
 public class ShopTests {
 
     @AfterAll
-    static void tearDown() {
+    static void tearDown() throws SQLException {
         cleanDatabase();
     }
 
