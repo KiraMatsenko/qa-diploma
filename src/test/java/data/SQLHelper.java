@@ -3,23 +3,36 @@ package data;
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class SQLHelper {
     private static final QueryRunner runner = new QueryRunner();
-    private static String dbName = System.getProperty("mysqlDatabase");
-    private static String user = System.getProperty("mysqlUser");
-    private static String pass = System.getProperty("mysqlPassword");
+    private static Properties properties;
+
+    static {
+        try {
+            properties = new Properties();
+            properties.load(new FileInputStream("gradle.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private SQLHelper() {
-
     }
 
     private static Connection getConn() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/" + dbName, user, pass);
+        String dbUrl = "jdbc:mysql://" + properties.getProperty("mysqlHost") + ":" + properties.getProperty("mysqlPort") + "/" + properties.getProperty("mysqlDatabase");
+        String user = properties.getProperty("mysqlUser");
+        String pass = properties.getProperty("mysqlPassword");
+        return DriverManager.getConnection(dbUrl, user, pass);
     }
+
 
     @SneakyThrows
     private static void closeConn(Connection connection) {

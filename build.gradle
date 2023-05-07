@@ -5,7 +5,7 @@ plugins {
 
 ext {
     mysqlHost = "localhost"
-    mysqlPort = "3306"
+    mysqlPort = 3306
     mysqlDatabase = "app"
     mysqlUser = "app"
     mysqlPassword = "pass"
