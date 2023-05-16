@@ -25,12 +25,20 @@ public class SQLHelper {
 
     private SQLHelper() {
     }
-
     private static Connection getConn() throws SQLException {
-        String dbUrl = "jdbc:mysql://" + properties.getProperty("mysqlHost") + ":" + properties.getProperty("mysqlPort") + "/" + properties.getProperty("mysqlDatabase");
-        String user = properties.getProperty("mysqlUser");
-        String pass = properties.getProperty("mysqlPassword");
-        return DriverManager.getConnection(dbUrl, user, pass);
+        String dbType = System.getProperty("db.type");
+        if (dbType.equals("postgresql")) {
+            String dbUrl = "jdbc:postgresql://" + properties.getProperty("db.host") + ":" + properties.getProperty("db.port") + "/" + properties.getProperty("db.name");
+            String user = properties.getProperty("db.user");
+            String password = properties.getProperty("db.password");
+            return DriverManager.getConnection(dbUrl, user, password);
+        } else if (dbType.equals("mysql")) {
+            String mySqlDbUrl = "jdbc:mysql://" + properties.getProperty("mysql.host") + ":" + properties.getProperty("mysql.port") + "/" + properties.getProperty("mysql.database");
+            String mySqlUser = properties.getProperty("mysql.user");
+            String mySqlPass = properties.getProperty("mysql.password");
+            return DriverManager.getConnection(mySqlDbUrl, mySqlUser, mySqlPass);
+        }
+        throw new IllegalArgumentException("Unknown database type: " + dbType);
     }
 
 
